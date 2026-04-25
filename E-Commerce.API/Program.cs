@@ -6,7 +6,7 @@ namespace E_Commerce.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +29,7 @@ namespace E_Commerce.API
 
             using var scope = app.Services.CreateScope();
             var objOfDataSeeding = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-            objOfDataSeeding.SeedData(); 
+            await objOfDataSeeding.SeedDataAsync(); 
 
             #endregion
 
