@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities.ProductModule;
 using Shared.Dtos;
+using static System.Net.WebRequestMethods;
 
 namespace Services.MappingProfiles
 {
@@ -12,7 +13,8 @@ namespace Services.MappingProfiles
             CreateMap<ProductBrand, BrandResultDto>();
             CreateMap<Product, ProductResultDto>()
                 .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.ProductBrand.Name))
-                .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.ProductType.Name));
+                .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.ProductType.Name))
+                .ForMember(des => des.PictureUrl,opt => opt.MapFrom<PictureUrlResolver>());
         }
     }
 }
