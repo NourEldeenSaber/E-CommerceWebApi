@@ -9,5 +9,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Sevices.Abstraction\Sevices.Abstraction.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App">
+			
+		</FrameworkReference>
+	</ItemGroup>
 </Project>
