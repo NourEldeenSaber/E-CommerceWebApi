@@ -29,6 +29,11 @@ namespace Presistence
                     .Aggregate(query, (currentQuery, expression) => currentQuery.Include(expression));
             }
 
+            //pagination
+            if(specifications.IsPginated == true)
+            {
+                query = query.Skip(specifications.Skip).Take(specifications.Take);
+            }
 
             return query;
         }

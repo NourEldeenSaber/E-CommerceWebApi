@@ -20,14 +20,20 @@ namespace Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductResultDto>> GetAllProductsAsync(ProductSpecificationParameters parameters)
+        public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductSpecificationParameters parameters)
         {
+            var productRepo = _unitOfWork.GetRepository<Product, int>();
+
             var specifications = new ProductWithBrandAndTypeSpecifications(parameters);
-            var products = await _unitOfWork.GetRepository<Product,int>().GetAllAsync(specifications);
+            var products = await productRepo.GetAllAsync(specifications);
 
             // mapping IEnumerable<Product> => IEnumerable<ProductResultDto>
             var productsDto = _mapper.Map<IEnumerable<ProductResultDto>>(products);
-            return productsDto;
+
+            var pageSize = productsDto.Count();
+            var countSpecifications = new ProductCountSpecification(parameters);
+            var totalCount = await productRepo.CountAsync(countSpecifications);
+            return new PaginatedResult<ProductResultDto>(parameters.PageIndex, pageSize, totalCount, productsDto);
         }
         public async Task<IEnumerable<BrandResultDto>> GetAllBrandsAsync()
         {
