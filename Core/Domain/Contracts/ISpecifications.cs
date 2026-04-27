@@ -12,5 +12,9 @@ namespace Domain.Contracts
         // ex => .Include(p => p.RelatedData).Include(...);
         public List<Expression<Func<TEntity,object>>> IncludeExpressions { get; }
 
+        //OrderBy ,OrderByDes
+        public Expression<Func<TEntity,object>> OrderBy { get;  }
+        public Expression<Func<TEntity,object>> OrderByDescending { get; }
+
     }
 }

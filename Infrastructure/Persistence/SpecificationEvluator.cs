@@ -15,12 +15,20 @@ namespace Presistence
             if (specifications.Criteria is not null)
                 query = query.Where(specifications.Criteria);
 
+            // sorting
+            if(specifications.OrderBy is not null)
+                query = query.OrderBy(specifications.OrderBy);
+
+            if (specifications.OrderByDescending is not null)
+                query = query.OrderByDescending(specifications.OrderByDescending);
+
             //Includes
             if (specifications.IncludeExpressions is not null && specifications.IncludeExpressions.Count > 0)
             {
                 query = specifications.IncludeExpressions
                     .Aggregate(query, (currentQuery, expression) => currentQuery.Include(expression));
             }
+
 
             return query;
         }
