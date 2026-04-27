@@ -9,7 +9,8 @@ namespace Services.Specifications
         //Get All Products And Brand And Type
         public ProductWithBrandAndTypeSpecifications(ProductSpecificationParameters parameters)
             : base(p => (!parameters.TypeId.HasValue || p.TypeId == parameters.TypeId) &&
-                  (!parameters.BrandId.HasValue || p.BrandId == parameters.BrandId))
+                  (!parameters.BrandId.HasValue || p.BrandId == parameters.BrandId)&&
+                   (string.IsNullOrEmpty(parameters.Search) || p.Name.ToLower().Contains(parameters.Search.ToLower())))
         {
             AddIncludes(p => p.ProductBrand);
             AddIncludes(p => p.ProductType);
