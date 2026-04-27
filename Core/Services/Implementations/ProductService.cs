@@ -18,9 +18,9 @@ namespace Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductResultDto>> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductResultDto>> GetAllProductsAsync(int? TypeId , int? BrandId)
         {
-            var specifications = new ProductWithBrandAndTypeSpecifications();
+            var specifications = new ProductWithBrandAndTypeSpecifications(TypeId, BrandId);
             var products = await _unitOfWork.GetRepository<Product,int>().GetAllAsync(specifications);
 
             // mapping IEnumerable<Product> => IEnumerable<ProductResultDto>

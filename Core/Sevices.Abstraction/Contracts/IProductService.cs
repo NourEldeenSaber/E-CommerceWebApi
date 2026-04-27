@@ -5,7 +5,7 @@ namespace Sevices.Abstraction.Contracts
     public interface IProductService
     {
         //GetAllProducts
-        Task<IEnumerable<ProductResultDto>> GetAllProductsAsync();
+        Task<IEnumerable<ProductResultDto>> GetAllProductsAsync(int? TypeId , int? BrandId);
 
         //GetAllBrands
         Task<IEnumerable<BrandResultDto>> GetAllBrandsAsync();
