@@ -1,7 +1,4 @@
-using Domain.Contracts;
 using E_Commerce.API.Extensions;
-using E_Commerce.API.Middlewares;
-
 
 namespace E_Commerce.API
 {
