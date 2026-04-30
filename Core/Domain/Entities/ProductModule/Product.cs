@@ -19,8 +19,6 @@
         public ProductBrand ProductBrand { get; set; } = null!;
         public int BrandId { get; set; } //FK
 
-
         #endregion
-
     }
 }

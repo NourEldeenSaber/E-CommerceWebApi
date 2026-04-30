@@ -1,6 +1,4 @@
-﻿
-
-using Domain.Entities.ProductModule;
+﻿using Domain.Entities.ProductModule;
 using Shared;
 
 namespace Services.Specifications
