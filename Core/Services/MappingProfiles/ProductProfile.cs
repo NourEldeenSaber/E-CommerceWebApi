@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities.ProductModule;
-using Shared.Dtos;
+using Shared.Dtos.ProductModule;
 using static System.Net.WebRequestMethods;
 
 namespace Services.MappingProfiles
