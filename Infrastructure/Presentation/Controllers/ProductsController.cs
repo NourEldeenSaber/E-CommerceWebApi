@@ -8,9 +8,8 @@ using Shared.ErrorModels;
 
 namespace Presentation.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+   
+    public class ProductsController : ApiController
     {
         private readonly IServiceManager _serviceManager;
 
