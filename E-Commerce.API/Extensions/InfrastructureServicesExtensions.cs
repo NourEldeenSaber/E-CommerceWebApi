@@ -1,4 +1,6 @@
 ﻿using Domain.Contracts;
+using Domain.Entities.IdentityModule;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
 using Presistence.Identity;
@@ -30,6 +32,16 @@ namespace E_Commerce.API.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
             });
 
+            services.AddIdentity<User, IdentityRole>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = true;
+                opt.Password.RequireDigit = true;
+                opt.Password.RequireUppercase = true;
+                opt.Password.RequireLowercase = true;
+                opt.User.RequireUniqueEmail = true;
+
+            }).AddEntityFrameworkStores<IdentityStoreDbContext>();
+                
             return services;
         }
     }
