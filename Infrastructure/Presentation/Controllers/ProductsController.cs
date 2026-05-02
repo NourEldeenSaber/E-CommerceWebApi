@@ -34,9 +34,6 @@ namespace Presentation.Controllers
             => Ok(await _serviceManager.ProductService.GetAllTypesAsync());
 
         [ProducesResponseType(typeof(ProductResultDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(typeof(ErrorDetails), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ValidationErrorResponse), StatusCodes.Status400BadRequest)]
         //GetProductById
         [HttpGet("{id:int}")]//BaseUrl/Products/10
         public async Task<ActionResult<ProductResultDto>> GetProductByIdAsync(int id)
