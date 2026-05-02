@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Presistence.Data;
+using Presistence.Identity;
 using Presistence.Repositories;
 using StackExchange.Redis;
 
@@ -23,6 +24,12 @@ namespace E_Commerce.API.Extensions
             });
 
             services.AddScoped<IBasketRepository, BasketRepository>();
+
+            services.AddDbContext<IdentityStoreDbContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
+            });
+
             return services;
         }
     }
