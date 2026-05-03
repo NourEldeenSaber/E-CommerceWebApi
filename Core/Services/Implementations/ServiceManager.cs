@@ -3,13 +3,15 @@ using Domain.Contracts;
 using Domain.Entities.IdentityModule;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Sevices.Abstraction.Contracts;
+using Shared.Common;
 
 namespace Services.Implementations
 {
     public class ServiceManager(
         IMapper _mapper, IUnitOfWork _unitOfWork ,
-        IBasketRepository _basketRepository, UserManager<User> _user , IConfiguration _configuration) 
+        IBasketRepository _basketRepository, UserManager<User> _user ,IOptions<JwtOptions> _options ) 
         : IServiceManager
     {
 
@@ -19,9 +21,9 @@ namespace Services.Implementations
 
         private readonly Lazy<IBasketService> _basketService =
             new Lazy<IBasketService>(() => new BasketService(_basketRepository, _mapper));
-        
+
         private readonly Lazy<IAuthenticationService> _authenticationService =
-            new Lazy<IAuthenticationService>(() => new AuthenticationService(_user, _configuration));
+            new Lazy<IAuthenticationService>(() => new AuthenticationService(_user, _options));
 
 
         public IProductService ProductService => _productService.Value; 

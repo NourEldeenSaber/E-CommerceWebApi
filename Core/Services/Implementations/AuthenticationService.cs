@@ -2,8 +2,10 @@
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Sevices.Abstraction.Contracts;
+using Shared.Common;
 using Shared.Dtos.IdentityModule;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,12 +16,12 @@ namespace Services.Implementations
     internal class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
+        private readonly IOptions<JwtOptions> _options;
 
-        public AuthenticationService(UserManager<User> userManager, IConfiguration configuration)
+        public AuthenticationService(UserManager<User> userManager, IOptions<JwtOptions> options)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _options = options;
         }
         public async Task<UserResultDto> LoginAsync(LoginDto loginDto)
         {
@@ -68,6 +70,8 @@ namespace Services.Implementations
         //Generate Token
         private async Task<string> CreateTokenAsync(User user)
         {
+            var jwtOptions = _options.Value;
+
             // Claims [Name, Email,Rloe]
             var claims = new List<Claim>()
             {
@@ -79,17 +83,17 @@ namespace Services.Implementations
                 claims.Add(new Claim(ClaimTypes.Role,role));
 
             //secret key => SymmetricSecurityKey
-            var secretKey = _configuration["JWTOptions:SecretKey"];
+            var secretKey = jwtOptions.SecretKey;
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
 
             //Algorithm
             var signInCreds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["JWTOptions:Issure"],
-                audience: _configuration["JWTOptions:Audiance"],
+                issuer: jwtOptions.Issuer,
+                audience: jwtOptions.Audiance,
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(10),
+                expires: DateTime.UtcNow.AddDays(jwtOptions.ExpirationInDays),
                 signingCredentials: signInCreds
             );
 

@@ -19,7 +19,7 @@ namespace E_Commerce.API
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
             //Core Services
-            builder.Services.AddCoreServices();
+            builder.Services.AddCoreServices(builder.Configuration);
 
             #endregion
 
