@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sevices.Abstraction.Contracts;
 using Shared.Dtos.BasketModule;
 
 namespace Presentation.Controllers
 {
+    [Authorize]
     public class BasketController : ApiController
     {
         private readonly IServiceManager _serviceManager;
