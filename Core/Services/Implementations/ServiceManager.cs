@@ -2,13 +2,14 @@
 using Domain.Contracts;
 using Domain.Entities.IdentityModule;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Sevices.Abstraction.Contracts;
 
 namespace Services.Implementations
 {
     public class ServiceManager(
         IMapper _mapper, IUnitOfWork _unitOfWork ,
-        IBasketRepository _basketRepository, UserManager<User> _user) 
+        IBasketRepository _basketRepository, UserManager<User> _user , IConfiguration _configuration) 
         : IServiceManager
     {
 
@@ -20,7 +21,7 @@ namespace Services.Implementations
             new Lazy<IBasketService>(() => new BasketService(_basketRepository, _mapper));
         
         private readonly Lazy<IAuthenticationService> _authenticationService =
-            new Lazy<IAuthenticationService>(() => new AuthenticationService(_user));
+            new Lazy<IAuthenticationService>(() => new AuthenticationService(_user, _configuration));
 
 
         public IProductService ProductService => _productService.Value; 
