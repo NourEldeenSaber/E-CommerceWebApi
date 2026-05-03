@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.IdentityModule;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sevices.Abstraction.Contracts;
 using Shared.Dtos.IdentityModule;
@@ -13,10 +14,12 @@ namespace Services.Implementations
     internal class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public AuthenticationService(UserManager<User> userManager )
+        public AuthenticationService(UserManager<User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
+            _configuration = configuration;
         }
         public async Task<UserResultDto> LoginAsync(LoginDto loginDto)
         {
@@ -76,14 +79,15 @@ namespace Services.Implementations
                 claims.Add(new Claim(ClaimTypes.Role,role));
 
             //secret key => SymmetricSecurityKey
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("74312bc9f0d59ec912574abebd6fbb8cca7f2e7d91764123296a5b6b5fa02a64"));
+            var secretKey = _configuration["JWTOptions:SecretKey"];
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
 
             //Algorithm
             var signInCreds = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "https://localhost:7199/",
-                audience: "AngularProject",
+                issuer: _configuration["JWTOptions:Issure"],
+                audience: _configuration["JWTOptions:Audiance"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(10),
                 signingCredentials: signInCreds
