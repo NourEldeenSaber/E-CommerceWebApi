@@ -4,7 +4,7 @@
     {
         public Guid Id { get; init; }
         public string UserEmail { get; init; } = string.Empty;
-        public string ShippingAddress { get; init; } = string.Empty;
+        public AddressDto ShippingAddress { get; init; } 
         public ICollection<OrderItemDto> OrderItems { get; init; } = new List<OrderItemDto>();
         public string PaymentStatus { get; init; } = string.Empty;
         public string DeliveryMethod { get; init; } = string.Empty;

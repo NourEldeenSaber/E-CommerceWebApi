@@ -17,6 +17,7 @@ namespace Services.MappingProfiles
             CreateMap<Order, OrderResult>()
                 .ForMember(des => des.PaymentStatus, opt => opt.MapFrom(src => src.PaymentStatus.ToString()))
                 .ForMember(des => des.DeliveryMethod, opt => opt.MapFrom(src => src.DeliveryMethod.ShortName))
+                .ForMember(des => des.ShippingAddress, opt => opt.MapFrom(src => src.ShippingAddress))
                 .ForMember(des => des.Total, opt => opt.MapFrom(src => src.SubTotal + src.DeliveryMethod.Price));
         }
     }
