@@ -23,7 +23,7 @@ namespace Services.Implementations
             new Lazy<IBasketService>(() => new BasketService(_basketRepository, _mapper));
 
         private readonly Lazy<IAuthenticationService> _authenticationService =
-            new Lazy<IAuthenticationService>(() => new AuthenticationService(_user, _options));
+            new Lazy<IAuthenticationService>(() => new AuthenticationService(_user, _options, _mapper));
 
         private readonly Lazy<IOrderService> _orderService =
             new Lazy<IOrderService>(() => new OrderService(_unitOfWork,_mapper,_basketRepository));
