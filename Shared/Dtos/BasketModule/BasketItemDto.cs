@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace Shared.Dtos.BasketModule
 {
-    public record BasketItemDto(
-        string Id,
-        string ProductName,
-        [Range(1,double.MaxValue)]
-        decimal Price,
-        string PictureUrl ,
-        [Range(1,99)]
-        int Quantity
-    );
+    public record BasketItemDto
+    {
+        public int Id { get; set; }
+        public string ProductName {  get; set; } =string.Empty;
+        [Range(1, double.MaxValue)]
+        public decimal Price { get; set; }
+        public string PictureUrl { get; set; } =string.Empty;
+        [Range(1, 99)]
+        public int Quantity { get; set; }
+}
     
 }

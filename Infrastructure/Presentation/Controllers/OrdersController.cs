@@ -12,7 +12,8 @@ namespace Presentation.Controllers
         //CreateOrder
         [HttpPost]
         public async Task<ActionResult<OrderResult>> CreateOrderAsync([FromBody]OrderRequest orderRequest)
-        {   var userEmail = User.FindFirstValue(ClaimTypes.Email);
+        {   
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
             var order = await _serviceManager.OrderService.CreateOrderAsync(orderRequest, userEmail!);
             return Ok(order);
         }

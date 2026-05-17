@@ -12,7 +12,7 @@ namespace Presistence.Data.Configurations
 
             // Order 1 => M OrderItems
             builder.HasMany(o => o.OrderItems)
-                .WithOne();
+                .WithOne().OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(o => o.PaymentStatus).HasConversion(
                 ps => ps.ToString(), ps => Enum.Parse<OrderPaymentStatus>(ps));

@@ -25,30 +25,40 @@ namespace Services.Implementations
         public async Task<OrderResult> CreateOrderAsync(OrderRequest orderRequest, string userEmail)
         {
             // Map AddressDto To Address
-            var address = _mapper.Map<Address>(orderRequest.ShippingAddress);
+            var address = _mapper.Map<Address>(orderRequest.ShipToAddress);
             
             // GetOrderItems
             var basket = await _basketRepository.GetBasketAsync(orderRequest.BasketId)
                 ?? throw new BasketNotFoundException(orderRequest.BasketId);
 
             var orderItems = new List<OrderItem>();
-            foreach(var item in basket.BasketItems)
+            foreach(var item in basket.Items)
             {
                 var product = await _unitOfWork.GetRepository<Product,int>()
                                   .GetByIdAsync(item.Id) ?? throw new ProductNotFoundException(item.Id);
                 orderItems.Add(CreateOrderItem(product, item));
             }
 
+            var orderRepo = _unitOfWork.GetRepository<Order,Guid>();
+
+
             // DeliveryMethod 
-            var deliveryMethod = await _unitOfWork.GetRepository<DeliveryMethod, int>().GetByIdAsync(orderRequest.DelivaryMethodId) 
-                                        ?? throw new DeliveryMethodsNotFoundException(orderRequest.DelivaryMethodId);
+            var deliveryMethod = await _unitOfWork.GetRepository<DeliveryMethod, int>().GetByIdAsync(orderRequest.DeliveryMethodId) 
+                                        ?? throw new DeliveryMethodsNotFoundException(orderRequest.DeliveryMethodId);
+
+
+            var orderExist = await orderRepo.GetByIdAsync(new OrderWithPaymentIntentIdSpecifications(basket.PaymentIntentId));
+            if(orderExist != null)
+            {
+                orderRepo.Delete(orderExist);
+            }
 
             // Calculate SubTotal 
             var subTotal = orderItems.Sum(o => o.Price * o.Quantity);
 
             // Create Order
-            var orderToCreate = new Order(userEmail, address, orderItems, deliveryMethod, subTotal);
-            await _unitOfWork.GetRepository<Order,Guid>().AddAsync(orderToCreate);
+            var orderToCreate = new Order(userEmail, address, orderItems, deliveryMethod, subTotal, basket.PaymentIntentId!);
+            await orderRepo.AddAsync(orderToCreate);
             await _unitOfWork.SaveChangesAsync();
 
             var orderResult =  _mapper.Map<OrderResult>(orderToCreate);

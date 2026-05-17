@@ -19,7 +19,7 @@ namespace E_Commerce.API.Middlewares
             {
                 await _next(context);
 
-                if(context.Response.StatusCode == StatusCodes.Status404NotFound)
+                if(context.Response.StatusCode == StatusCodes.Status404NotFound && !context.Response.HasStarted)
                     await HandleNotFoundApiAsync(context);
             }
             catch (Exception ex) {
@@ -27,7 +27,6 @@ namespace E_Commerce.API.Middlewares
                 await HandleExceptionAsync(context,ex);
             }
         }
-
         private async Task HandleNotFoundApiAsync(HttpContext context)
         {
             context.Response.ContentType = "application/json";
@@ -37,7 +36,6 @@ namespace E_Commerce.API.Middlewares
             }.ToString();
             await context.Response.WriteAsync(response);
         }
-
         private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             // write password in body
@@ -62,7 +60,6 @@ namespace E_Commerce.API.Middlewares
             response.StatusCode = context.Response.StatusCode;
             await context.Response.WriteAsync(response.ToString());
         }
-
         private int HandleValidationException(ValidationException validationException, ErrorDetails response)
         {
             response.Errors = validationException.Errors;

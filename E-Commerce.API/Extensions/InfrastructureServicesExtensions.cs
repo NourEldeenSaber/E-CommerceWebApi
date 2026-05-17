@@ -30,6 +30,7 @@ namespace E_Commerce.API.Extensions
             });
 
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<ICacheRepository, CacheRepository>();
 
             services.AddDbContext<IdentityStoreDbContext>(options =>
             {

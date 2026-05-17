@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Attributes;
 using Sevices.Abstraction.Contracts;
 using Shared;
 using Shared.Dtos.ProductModule;
@@ -19,6 +20,7 @@ namespace Presentation.Controllers
         }
 
         //GetAllProducts
+        [RedisCache(120)]
         [HttpGet]
         public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProductsAsync([FromQuery]ProductSpecificationParameters parameters)
             => Ok(await _serviceManager.ProductService.GetAllProductsAsync(parameters));
@@ -37,7 +39,10 @@ namespace Presentation.Controllers
         //GetProductById
         [HttpGet("{id:int}")]//BaseUrl/Products/10
         public async Task<ActionResult<ProductResultDto>> GetProductByIdAsync(int id)
-            => Ok( await _serviceManager.ProductService.GetProductByIdAsync(id));
-        
+        {
+            var result = await _serviceManager.ProductService.GetProductByIdAsync(id);
+            return HandleResult<ProductResultDto>(result);
+        }
+
     }
 }

@@ -7,6 +7,7 @@ using Sevices.Abstraction.Contracts;
 using Shared;
 using Shared.Dtos.ProductModule;
 using Shared.Enums;
+using Shared.Results;
 
 namespace Services.Implementations
 {
@@ -20,7 +21,6 @@ namespace Services.Implementations
            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
         public async Task<PaginatedResult<ProductResultDto>> GetAllProductsAsync(ProductSpecificationParameters parameters)
         {
             var productRepo = _unitOfWork.GetRepository<Product, int>();
@@ -52,15 +52,13 @@ namespace Services.Implementations
             var typesDto = _mapper.Map<IEnumerable<TypeResultDto>>(types);
             return typesDto;
         }
-        public async Task<ProductResultDto> GetProductByIdAsync(int id)
+        public async Task<Result<ProductResultDto>> GetProductByIdAsync(int id)
         {
             var specifications = new ProductWithBrandAndTypeSpecifications(id);
             var product = await _unitOfWork.GetRepository<Product,int>().GetByIdAsync(specifications);
 
-            ////mapping Product => ProductResultDto
-            //var productDto = _mapper.Map<ProductResultDto>(product);
-            //return productDto;
-            return product is null ? throw new ProductNotFoundException(id) : _mapper.Map<ProductResultDto>(product);
+            return product is null ?  Error.NotFound("Product.NotFound",$"Product With {id} Is Not Found") 
+                : _mapper.Map<ProductResultDto>(product);
         }
     }
 }

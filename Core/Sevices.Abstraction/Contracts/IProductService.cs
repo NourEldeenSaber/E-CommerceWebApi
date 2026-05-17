@@ -1,6 +1,7 @@
 ﻿using Shared;
 using Shared.Dtos.ProductModule;
 using Shared.Enums;
+using Shared.Results;
 
 namespace Sevices.Abstraction.Contracts
 {
@@ -16,6 +17,6 @@ namespace Sevices.Abstraction.Contracts
         Task<IEnumerable<TypeResultDto>> GetAllTypesAsync();
 
         //GetProductById
-        Task<ProductResultDto> GetProductByIdAsync(int id);
+        Task<Result<ProductResultDto>> GetProductByIdAsync(int id);
     }
 }
